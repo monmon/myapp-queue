@@ -88,6 +88,10 @@ MyApp::Queue - Queue System
 
   use MyApp::Queue;
 
+  my $queue = MyApp::Queue->new($dbh, $qname); # quname is table name
+  $queue->enqueue($worker, $data);  # $data is hashref
+  my $row = $queue->dequeue;        # $row->{worker} is $worker, $row->{data} is jsonized $data
+
 =head1 DESCRIPTION
 
 MyApp::Queue is queue system copied MyQueue.
