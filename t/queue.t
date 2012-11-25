@@ -61,7 +61,16 @@ subtest 'locked message in queue' => sub {
 };
 
 sub setup {
-    my $dbh = DBI->connect('dbi:mysql:dbname=test;host=localhost;port=8889;mysql_socket=/Applications/MAMP/tmp/mysql/mysql.sock', 'root', 'root');
+    my $dbh = DBI->connect(
+        'dbi:mysql:dbname=test;host=localhost;port=8889;mysql_socket=/Applications/MAMP/tmp/mysql/mysql.sock',
+        'root',
+        'root',
+        {
+            PrintError => 0,
+            RaiseError => 1,
+            AutoCommit => 0,
+        }
+    );
     my $qname = 'myqueue';
 
     my $create_qname = qq{
@@ -73,7 +82,9 @@ sub setup {
             PRIMARY KEY  (`id`)
         ) ENGINE=InnoDB;
     };
-    $dbh->do($create_qname);
+    eval {
+        $dbh->do($create_qname);
+    };
 
     ($dbh, $qname);
 }
@@ -81,7 +92,7 @@ sub setup {
 sub teardown {
     my($dbh, $qname) = @_;
 
-    $dbh->do("drop table $qname");
+    $dbh->do("DROP TABLE $qname");
     $dbh->disconnect;
 }
 

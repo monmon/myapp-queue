@@ -1,6 +1,7 @@
 package MyApp::Queue;
 use strict;
 use warnings;
+use Carp;
 use JSON::Syck;
 our $VERSION = '0.01';
 
